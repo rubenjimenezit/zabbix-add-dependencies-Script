@@ -21,7 +21,7 @@ from typing import Dict, List, Any, Optional
 
 # === CONFIGURATION ===
 ZABBIX_URL = "http://localhost:8080/api_jsonrpc.php"  # Change to your Zabbix API URL
-API_TOKEN = "8f6204c1e24de483ef83463c2fba7dbcc4d6e4d839542de8085dfef70db29db6"  # Your API token
+API_TOKEN = ""  # Your API token
 TIMEOUT = 30  # Request timeout in seconds
 # =====================
 
