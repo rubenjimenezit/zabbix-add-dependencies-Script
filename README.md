@@ -15,4 +15,9 @@ Automate the creation of trigger dependencies in Zabbix to build hierarchical mo
 
 ⚠️ Limitation: This script cannot handle prototype triggers due to Zabbix API restrictions. Discovered triggers are automatically filtered out to prevent errors.
 
-Perfect for network monitoring scenarios where you want regular host triggers to depend on device availability.
+Perfect for network monitoring scenarios where you want regular host triggers to depend on device availability
+
+
+How to Use Trigger Dependencies Script
+
+python3 zabbix_dependencies.py <hostid> <parent_triggerid>
