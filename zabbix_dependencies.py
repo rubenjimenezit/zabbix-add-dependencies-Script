@@ -504,12 +504,6 @@ class ZabbixAPI:
             templates = host_templates[0]["parentTemplates"]
             logger.info(f"Host has {len(templates)} template(s)")
             
-            # For now, return the first template
-            # In a more sophisticated version, you could:
-            # 1. Ask user to choose
-            # 2. Find template with most LLD rules
-            # 3. Use heuristics to find the "main" template
-            
             if templates:
                 primary_template = templates[0]
                 logger.info(f"Using template: {primary_template['name']} ({primary_template['templateid']})")
