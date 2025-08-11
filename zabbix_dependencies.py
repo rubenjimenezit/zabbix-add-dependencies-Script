@@ -1,18 +1,4 @@
 #!/usr/bin/env python3
-"""
-Zabbix Trigger Dependencies Script
-
-This script adds trigger dependencies for all triggers on a specified host,
-making them depend on a parent trigger. This is useful for creating trigger
-hierarchies where child triggers are suppressed when the parent trigger fires.
-
-Usage: python3 script.py <hostid> <parent_triggerid>
-
-Requirements:
-- requests library: pip install requests
-- Valid Zabbix API token with appropriate permissions
-"""
-
 import requests
 import json
 import sys
