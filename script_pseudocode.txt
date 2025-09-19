@@ -1,0 +1,67 @@
+
+
+For all branch offices
+    Get the full list of BRANCH devices
+        Use either Zabbix API with host.get, or IPFabric IP inventory API request
+    For all those with substring "-FW"
+        Get the "Down" triggerid via API
+        Example:
+            {
+                "jsonrpc": "2.0",
+                "method": "trigger.get",
+                "params": {
+                    "filter": {
+                        "host": [
+                            "AUSLAB-FW02"
+                        ]
+                    },
+                    "search": { "description": "{HOST.HOST} Down" },
+                    "output": ["triggerid","description"]
+                },
+                "id": 3,
+                "auth": "{{ZBX_TOKEN}}"
+            }
+        Response:
+            {
+                "jsonrpc": "2.0",
+                "result": [
+                    {
+                        "triggerid": "890194",
+                        "description": "{HOST.HOST} Down"
+                    }
+                ],
+                "id": 3
+            }
+    For all those without substring “-FW”
+        Get the hostid via API request
+            Example: 
+                {
+                    "jsonrpc": "2.0",
+                    "method": "host.get",
+                    "params": {
+                        "output": ["name"],
+                        "filter": {
+                            "host": [
+                                "AUSLAB-SW01"
+                            ]
+                        }
+
+                    },
+                    "id": 2,
+                    "auth": "{{ZBX_TOKEN}}"
+                }
+            Response
+                {
+                    "jsonrpc": "2.0",
+                    "result": [
+                        {
+                            "hostid": "16642",
+                            "name": "AUSLAB-SW01"
+                        }
+                    ],
+                    "id": 2
+                }
+        Execute the zabbix_dependencies.py python script using arguments:
+            - hostid
+            - triggerid
+        

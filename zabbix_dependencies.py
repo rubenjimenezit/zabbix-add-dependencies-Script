@@ -6,8 +6,8 @@ import logging
 from typing import Dict, List, Any, Optional
 
 # === CONFIGURATION ===
-ZABBIX_URL = "http://localhost:8080/api_jsonrpc.php"  # Change to your Zabbix API URL
-API_TOKEN = ""  # Your API token
+ZABBIX_URL = "https://v02pzabbix01.na.drillinginfo.com/zabbix/api_jsonrpc.php"  # Change to your Zabbix API URL
+API_TOKEN = "a9c617beb446f2a78593c9d84d9e8c7f31ae6211bdaf5d72c034436709b5c8f5"  # Your API token
 TIMEOUT = 30  # Request timeout in seconds
 # =====================
 
@@ -56,7 +56,8 @@ class ZabbixAPI:
                 self.url,
                 headers=headers,
                 data=json.dumps(payload),
-                timeout=self.timeout
+                timeout=self.timeout,
+                verify=False  # Disable SSL cert verification
             )
             response.raise_for_status()
             
