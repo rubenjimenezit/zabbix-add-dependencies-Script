@@ -1,24 +1,22 @@
 
 
 For all branch offices
-    Get the full list of BRANCH devices
-        Use either Zabbix API with host.get, or IPFabric IP inventory API request
-    For all those with substring "-FW"
-        Get the "Down" triggerid via API
+    Get the full list of devices pertaining either to hostgroup "branch-junos" or "branch-mist"
         Example:
             {
                 "jsonrpc": "2.0",
-                "method": "trigger.get",
+                "method": "hostgroup.get",
                 "params": {
                     "filter": {
-                        "host": [
-                            "AUSLAB-FW02"
+                        "name": [
+                            "branch-junos"
                         ]
                     },
-                    "search": { "description": "{HOST.HOST} Down" },
-                    "output": ["triggerid","description"]
+                    "output": ["name"],
+                    "monitored_hosts": true,
+                    "selectHosts": ["name", "status"]
                 },
-                "id": 3,
+                "id": 2,
                 "auth": "{{ZBX_TOKEN}}"
             }
         Response:
@@ -26,42 +24,63 @@ For all branch offices
                 "jsonrpc": "2.0",
                 "result": [
                     {
-                        "triggerid": "890194",
-                        "description": "{HOST.HOST} Down"
-                    }
-                ],
-                "id": 3
+                        "name": "branch-junos",
+                        "hosts": [
+                            {
+                                "hostid": "16640",
+                                "name": "UKSH-SW01",
+                                "status": "0"
+                            },
+                            {
+                                "hostid": "16642",
+                                "name": "AUSLAB-SW01",
+                                "status": "0"
+                            },
+                            ...
             }
-    For all those without substring “-FW”
-        Get the hostid via API request
-            Example: 
-                {
-                    "jsonrpc": "2.0",
-                    "method": "host.get",
-                    "params": {
-                        "output": ["name"],
-                        "filter": {
-                            "host": [
-                                "AUSLAB-SW01"
-                            ]
-                        }
+    Create a list with all the hostids of branch-mist + branch-junos
 
+
+    Get the full list of devices pertaining either to hostgroup "branch-paloalto"
+        Example:
+            {
+                "jsonrpc": "2.0",
+                "method": "hostgroup.get",
+                "params": {
+                    "filter": {
+                        "name": [
+                            "branch-paloalto"
+                        ]
                     },
-                    "id": 2,
-                    "auth": "{{ZBX_TOKEN}}"
-                }
-            Response
-                {
-                    "jsonrpc": "2.0",
-                    "result": [
-                        {
-                            "hostid": "16642",
-                            "name": "AUSLAB-SW01"
-                        }
-                    ],
-                    "id": 2
-                }
-        Execute the zabbix_dependencies.py python script using arguments:
-            - hostid
-            - triggerid
+                    "output": ["name"],
+                    "monitored_hosts": true,
+                    "selectHosts": ["name", "status"]
+                },
+                "id": 2,
+                "auth": "{{ZBX_TOKEN}}"
+            }
+        Response:
+            {
+                "jsonrpc": "2.0",
+                "result": [
+                    {
+                        "name": "branch-junos",
+                        "hosts": [
+                            {
+                                "hostid": "16640",
+                                "name": "UKSH-SW01",
+                                "status": "0"
+                            },
+                            {
+                                "hostid": "16642",
+                                "name": "AUSLAB-SW01",
+                                "status": "0"
+                            },
+                            ...
+            }
+    Create a list with all the hostids of branch-paloalto
+
+    Execute the zabbix_dependencies.py python script using arguments:
+        - hostid
+        - triggerid
         
