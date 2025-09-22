@@ -1,8 +1,14 @@
 
+This code will create zabbix trigger dependencies for all hosts monitored by a Zabbix instance.
+The triggers will be created on hosts pertaining to host groups "branch-junos" and "branch-mist"
+Trigger dependencies will be pointing only to the FW devices of the corresponding site. For example, "AUSLAB-SW01" will create dependencies only pointing to the "Down" trigger of "AUSLAB-FW01" and "AUSLAB-FW02".
+Each site can be identified by the site name coded on the first characters - the ones before the dash - of every device name. For example, for device "AUSLAB-FW01" the site name is "AUSLAB". And for "MAD-SW01" the site name is "MAD".
 
-For all branch offices
-    Get the full list of devices pertaining either to hostgroup "branch-junos" or "branch-mist"
-        Example:
+
+For each site:
+    Create a list with devices pertaining either to hostgroup "branch-junos" or "branch-mist" via an API call to Zabbix
+    Find a way to filter the response to return only devices pertaining to the current site
+        Example (not filtered yet, you need to filter it):
             {
                 "jsonrpc": "2.0",
                 "method": "hostgroup.get",
@@ -38,11 +44,11 @@ For all branch offices
                             },
                             ...
             }
-    Create a list with all the hostids of branch-mist + branch-junos
 
 
-    Get the full list of devices pertaining either to hostgroup "branch-paloalto"
-        Example:
+    Create a list of hostid pertaining to hostgroup "branch-paloalto" for this site
+    Find a way to filter the response to return only devices pertaining to the current site
+        Example (not filtered yet, you need to filter it):
             {
                 "jsonrpc": "2.0",
                 "method": "hostgroup.get",
@@ -78,9 +84,38 @@ For all branch offices
                             },
                             ...
             }
-    Create a list with all the hostids of branch-paloalto
+            
+    Create a list of triggerid of all "Down" triggers for all hostid of devices pertaining to host group "branch-paloalto" for the current site
+        Example of API call for one device (not filtered yet, you need to filter it):
+            {
+                "jsonrpc": "2.0",
+                "method": "trigger.get",
+                "params": {
+                    "filter": {
+                        "host": [
+                            "AUSLAB-FW02"
+                        ]
+                    },
+                    "search": { "description": "{HOST.HOST} Down" },
+                    "output": ["triggerid","description"]
+                },
+                "id": 3,
+                "auth": "{{ZBX_TOKEN}}"
+            }
+        Response:
+            {
+                "jsonrpc": "2.0",
+                "result": [
+                    {
+                        "triggerid": "890194",
+                        "description": "{HOST.HOST} Down"
+                    }
+                ],
+                "id": 3
+            }
 
-    Execute the zabbix_dependencies.py python script using arguments:
+
+    Use the code in zabbix_dependencies.py to create the dependencies using arguments:
         - hostid
         - triggerid
         
