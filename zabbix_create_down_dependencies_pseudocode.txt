@@ -1,12 +1,12 @@
 
 This code will create zabbix trigger dependencies for all hosts monitored by a Zabbix instance.
-The triggers will be created on hosts pertaining to host groups "branch-junos" and "branch-mist"
+The triggers will be created on hosts pertaining to host group "Branch-low"
 Trigger dependencies will be pointing only to the FW devices of the corresponding site. For example, "AUSLAB-SW01" will create dependencies only pointing to the "Down" trigger of "AUSLAB-FW01" and "AUSLAB-FW02".
 Each site can be identified by the site name coded on the first characters - the ones before the dash - of every device name. For example, for device "AUSLAB-FW01" the site name is "AUSLAB". And for "MAD-SW01" the site name is "MAD".
 
 
 For each site:
-    Create a list with devices pertaining either to hostgroup "branch-junos" or "branch-mist" via an API call to Zabbix
+    Create a list with devices pertaining either to hostgroup "Branch-low" via an API call to Zabbix
     Find a way to filter the response to return only devices pertaining to the current site
         Example (not filtered yet, you need to filter it):
             {
@@ -15,7 +15,7 @@ For each site:
                 "params": {
                     "filter": {
                         "name": [
-                            "branch-junos"
+                            "Branch-low"
                         ]
                     },
                     "output": ["name"],
@@ -30,23 +30,23 @@ For each site:
                 "jsonrpc": "2.0",
                 "result": [
                     {
-                        "name": "branch-junos",
+                        "name": "Branch-low",
                         "hosts": [
                             {
-                                "hostid": "16640",
-                                "name": "UKSH-SW01",
+                                "hostid": "15856",
+                                "name": "CGY-FL14-AP08",
                                 "status": "0"
                             },
                             {
-                                "hostid": "16642",
-                                "name": "AUSLAB-SW01",
+                                "hostid": "15857",
+                                "name": "CGY-FL14-AP03",
                                 "status": "0"
                             },
                             ...
             }
 
 
-    Create a list of hostid pertaining to hostgroup "branch-paloalto" for this site
+    Create a list of hostid pertaining to hostgroup "Branch-high" for this site
     Find a way to filter the response to return only devices pertaining to the current site
         Example (not filtered yet, you need to filter it):
             {
@@ -55,7 +55,7 @@ For each site:
                 "params": {
                     "filter": {
                         "name": [
-                            "branch-paloalto"
+                            "Branch-high"
                         ]
                     },
                     "output": ["name"],
@@ -68,24 +68,24 @@ For each site:
         Response:
             {
                 "jsonrpc": "2.0",
-                "result": [
-                    {
-                        "name": "branch-junos",
-                        "hosts": [
-                            {
-                                "hostid": "16640",
-                                "name": "UKSH-SW01",
-                                "status": "0"
-                            },
-                            {
-                                "hostid": "16642",
-                                "name": "AUSLAB-SW01",
-                                "status": "0"
-                            },
-                            ...
+                    "result": [
+                        {
+                            "name": "Branch-high",
+                            "hosts": [
+                                {
+                                    "hostid": "16811",
+                                    "name": "CGY-FL14-FW01",
+                                    "status": "0"
+                                },
+                                {
+                                    "hostid": "16812",
+                                    "name": "MAD-FW01",
+                                    "status": "0"
+                                },
+                                ...
             }
             
-    Create a list of triggerid of all "Down" triggers for all hostid of devices pertaining to host group "branch-paloalto" for the current site
+    Create a list of triggerid of all "Down" triggers for all hostid of devices pertaining to host group "Branch-high" for the current site
         Example of API call for one device (not filtered yet, you need to filter it):
             {
                 "jsonrpc": "2.0",
@@ -118,4 +118,8 @@ For each site:
     Use the code in zabbix_dependencies.py to create the dependencies using arguments:
         - hostid
         - triggerid
-        
+
+Notes: 
+- include the host device name that will add the dependency, along with the FW host name in the "Added dependency" logging message and the FW trigger id
+- For all API calls add "verify=False" to disable SSL cert verification
+- suppress the InsecureRequestWarning using urllib3

@@ -292,11 +292,11 @@ class ZabbixAPI:
             new_dependencies = current_dependencies + [{"triggerid": parent_triggerid}]
             
             # Update the trigger with new dependencies
-            # self.call("trigger.update", {
-            #     "triggerid": triggerid,
-            #     "dependencies": new_dependencies
-            # })
-            logger.info(f"Dependency NOT CREATED (TESTING) for trigger {triggerid}")
+            self.call("trigger.update", {
+                "triggerid": triggerid,
+                "dependencies": new_dependencies
+            })
+            # logger.info(f"TEST: NOT CREATED")
             return True
             
         except Exception as e:
@@ -372,11 +372,11 @@ class ZabbixAPI:
             new_dependencies = current_dependencies + [{"triggerid": template_parent_triggerid}]
             
             # Update the prototype with new dependencies
-            # self.call("triggerprototype.update", {
-            #     "triggerid": prototype_id,
-            #     "dependencies": new_dependencies
-            # })
-            logger.info(f"Dependency NOT CREATED (TESTING) for trigger prototype {prototype_id}")
+            self.call("triggerprototype.update", {
+                "triggerid": prototype_id,
+                "dependencies": new_dependencies
+            })
+            # logger.info(f"TEST: NOT CREATED")
 
             logger.info(f"✅ Successfully added dependency to prototype {prototype_id}")
             return True
